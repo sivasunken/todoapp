@@ -18,6 +18,7 @@ exports.create = (req, res) => {
     DueDate: req.body.dueDate,
     CreatedDate: new Date(),
     Completed: false,
+    // userId: req.body.userId,
   };
 
   // Save Task in the database
@@ -32,6 +33,8 @@ exports.create = (req, res) => {
 
 // Retrieve all Tasks from database
 exports.findAll = (req, res) => {
+  // const userId = req.query.userId;
+  // var condition = userId ? { userId: userId } : null;
   const description = req.query.description;
   var condition = description
     ? { description: { [Op.like]: `%${description}%` } }
@@ -125,6 +128,8 @@ exports.deleteAll = (req, res) => {
 
 // find all incomplete Task
 exports.findAllIncompleteTasks = (req, res) => {
+  // const userId = req.query.userId;
+  // Task.findAll({ where: { completed: false, userId: userId } })
   Task.findAll({ where: { completed: false } })
     .then((data) => {
       res.send(data);
