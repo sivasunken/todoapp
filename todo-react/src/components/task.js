@@ -1,11 +1,18 @@
 import { MDBRow, MDBCol } from "mdb-react-ui-kit";
 import React, { useContext } from "react";
+import Moment from "moment";
 
-import GetDateOnly from "../utils/dateHelper";
+import GetDateOnly, { getDateObject } from "../utils/dateHelper";
 import Context from "../utils/context";
 
 const Task = ({ task }) => {
   const context = useContext(Context);
+  Moment.locale("en");
+
+  const handleChange = (event) => {
+    task.completed = event.target.checked;
+    context.completeTask(task);
+  };
 
   return (
     <MDBRow>
@@ -15,12 +22,14 @@ const Task = ({ task }) => {
             {task.description}
           </span>
           {GetDateOnly(task.dueDate) < GetDateOnly(null).getTime() ? (
-            <span className="align-self-center mlr-3px">{task.dueDate}</span>
+            <span className="align-self-center mlr-3px">
+              {Moment(getDateObject(task.dueDate)).format("MMM D")}
+            </span>
           ) : null}
           <input
             type="checkbox"
             className="checkbox-round align-self-center mlr-3px border-dark"
-            onChange={() => context.completeTask(task)}
+            onChange={handleChange}
             value={task.completed}
           />
         </div>

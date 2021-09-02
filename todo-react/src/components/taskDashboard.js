@@ -5,7 +5,7 @@ import { useAlert } from "react-alert";
 import TaskList from "./taskList";
 import AddTask from "./addTask";
 import TaskService from "../services/taskService";
-import GetDateOnly from "../utils/dateHelper";
+import GetDateOnly, { dateCompare } from "../utils/dateHelper";
 import Context from "../utils/context";
 
 const TaskDashboard = () => {
@@ -23,9 +23,10 @@ const TaskDashboard = () => {
   const retrieveTasks = () => {
     TaskService.getIncompleteTasks()
       .then((response) => {
-        console.log(response.data);
+        let data = response.data.slice();
+        data.sort((a, b) => dateCompare(a.dueDate, b.dueDate));
         setTodayTasks(
-          response.data.filter((task) => {
+          data.filter((task) => {
             return (
               GetDateOnly(task.dueDate).getTime() ===
               GetDateOnly(null).getTime()
@@ -33,9 +34,7 @@ const TaskDashboard = () => {
           })
         );
         setOverdueTasks(
-          response.data.filter(
-            (task) => GetDateOnly(task.dueDate) < GetDateOnly(null)
-          )
+          data.filter((task) => GetDateOnly(task.dueDate) < GetDateOnly(null))
         );
       })
       .catch((err) => logError(err));

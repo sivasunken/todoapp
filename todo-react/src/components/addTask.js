@@ -9,12 +9,16 @@ import {
   MDBModalHeader,
   MDBModalTitle,
 } from "mdb-react-ui-kit";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
 
+import Context from "../utils/context";
+
 const AddTask = () => {
+  const context = useContext(Context);
+
   const [showModal, setShowModal] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
 
@@ -22,6 +26,14 @@ const AddTask = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    context.addTask({
+      description: event.target.description.value,
+      dueDate: dueDate,
+    });
+
+    event.target.description.value = "";
+    setDueDate(new Date());
+    setShowModal(false);
   };
 
   return (
@@ -56,6 +68,7 @@ const AddTask = () => {
                 <div className="d-flex m-2">
                   <label className="p-1">Due Date : </label>
                   <DayPickerInput
+                    id="dueDate"
                     value={dueDate}
                     onDayChange={(day) => setDueDate(day)}
                     dayPickerProps={{
@@ -70,7 +83,7 @@ const AddTask = () => {
                 </div>
 
                 <div className="d-flex">
-                  <MDBBtn className="flex-fill" color="success">
+                  <MDBBtn className="flex-fill" color="success" type="submit">
                     Add
                   </MDBBtn>
                 </div>
