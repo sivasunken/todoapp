@@ -14,10 +14,10 @@ exports.create = (req, res) => {
 
   // Create a Task
   const task = {
-    Description: req.body.description,
-    DueDate: req.body.dueDate,
-    CreatedDate: new Date(),
-    Completed: false,
+    description: req.body.description,
+    dueDate: req.body.dueDate,
+    createdDate: new Date(),
+    completed: false,
     // userId: req.body.userId,
   };
 
