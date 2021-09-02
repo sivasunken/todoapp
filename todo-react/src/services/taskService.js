@@ -1,17 +1,17 @@
-import http from "./http-common";
+import http from "./httpCommon";
 
 class TaskDataService {
   //Adding Only required endpoints
   getIncompleteTasks() {
-    return http.get("/task/incomplete");
+    return http.get("/tasks/incomplete");
   }
 
   addTask(task) {
-    return http.post("/task", task);
+    return http.post("/tasks", task);
   }
 
   updateTask(id, task) {
-    return http.put(`/task/${id}`, task);
+    return http.put(`/tasks/${id}`, task);
   }
 }
 
