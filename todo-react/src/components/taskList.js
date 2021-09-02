@@ -5,8 +5,8 @@ import Task from "./task";
 const TaskList = () => {
   return (
     <div>
-      Task List
-      <br />
+      <h3>Today - 3 Tasks</h3>
+      <hr />
       <Task />
       <br />
       <Task />

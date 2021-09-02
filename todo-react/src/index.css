@@ -32,3 +32,10 @@ code {
 .checkbox-round:checked {
   background-color: gray;
 }
+
+.addTask-row {
+  top: 95vh;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

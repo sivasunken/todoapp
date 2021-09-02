@@ -5,7 +5,7 @@ import TaskDashboard from "./components/taskDashboard";
 
 const App = () => {
   return (
-    <MDBContainer>
+    <MDBContainer fluid className="bg-light">
       <TaskDashboard />
     </MDBContainer>
   );
