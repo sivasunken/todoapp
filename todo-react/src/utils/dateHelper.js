@@ -6,3 +6,5 @@ export const getDateOnly = (date) => {
 export const getDateObject = (date) => {
   return new Date(date + " ");
 };
+
+export default getDateOnly;

@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { MDBCol, MDBRow } from "mdb-react-ui-kit";
+import { useAlert } from "react-alert";
 
 import TaskList from "./taskList";
 import AddTask from "./addTask";
 import TaskService from "../services/taskService";
-import { getDateOnly } from "../utils/dateHelper";
+import GetDateOnly from "../utils/dateHelper";
+import Context from "../utils/context";
 
 const TaskDashboard = () => {
+  const alert = useAlert();
   const [todayTasks, setTodayTasks] = useState([]);
   const [overdueTasks, setOverdueTasks] = useState([]);
 
   useEffect(() => retrieveTasks(), []);
+
+  const logError = (err) => {
+    alert.error(err);
+    console.log(err);
+  };
 
   const retrieveTasks = () => {
     TaskService.getIncompleteTasks()
@@ -18,40 +26,52 @@ const TaskDashboard = () => {
         console.log(response.data);
         setTodayTasks(
           response.data.filter((task) => {
-            console.log(
-              `${getDateOnly(task.dueDate).getTime()} ${getDateOnly(
-                null
-              ).getTime()}`
-            );
             return (
-              getDateOnly(task.dueDate).getTime() ===
-              getDateOnly(null).getTime()
+              GetDateOnly(task.dueDate).getTime() ===
+              GetDateOnly(null).getTime()
             );
           })
         );
         setOverdueTasks(
           response.data.filter(
-            (task) => getDateOnly(task.dueDate) < getDateOnly(null)
+            (task) => GetDateOnly(task.dueDate) < GetDateOnly(null)
           )
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => logError(err));
+  };
+
+  const completeTask = (task) => {
+    TaskService.updateTask(task.id, task)
+      .then(() => retrieveTasks())
+      .catch((err) => logError(err));
+  };
+
+  const addTask = (task) => {
+    TaskService.addTask(task)
+      .then(() => retrieveTasks())
+      .catch((err) => logError(err));
   };
 
   return (
-    <div>
+    <Context.Provider
+      value={{
+        completeTask: (task) => completeTask(task),
+        addTask: (task) => addTask(task),
+      }}
+    >
       <h6>My To-Do App</h6>
       <br />
-      <TaskList tasks={todayTasks} />
+      <TaskList tasks={todayTasks} header="Today" />
       <br />
-      <TaskList tasks={overdueTasks} />
+      <TaskList tasks={overdueTasks} header="Overdue" />
       <br />
       <MDBRow className="addTask-row">
         <MDBCol className="text-center">
           <AddTask />
         </MDBCol>
       </MDBRow>
-    </div>
+    </Context.Provider>
   );
 };
 
