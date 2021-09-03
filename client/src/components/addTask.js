@@ -13,11 +13,13 @@ import React, { useState, useContext } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
+import { useAlert } from "react-alert";
 
 import Context from "../utils/context";
 
 const AddTask = () => {
   const context = useContext(Context);
+  const alert = useAlert();
 
   const [showModal, setShowModal] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
@@ -26,6 +28,16 @@ const AddTask = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (!event.target.description.value) {
+      //Idea is to not proceed with the execution
+      // and let the user know no description was provided
+      // with the form
+      alert.error("No description provided");
+      return;
+    }
+
+    dueDate.setHours(0, 0, 0, 0);
     context.addTask({
       description: event.target.description.value,
       dueDate: dueDate,
