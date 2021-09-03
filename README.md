@@ -9,6 +9,11 @@ This is the basic Todo app which has the following stack
 
 These are all running in a Docker Compose which integrates them all together.
 
+### Make to have the following installed
+
+- Docker
+- Git
+
 ### Execute the following command to run in docker
 
 `docker-compose up --build`
